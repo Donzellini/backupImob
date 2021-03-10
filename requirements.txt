@@ -1,0 +1,5 @@
+flask
+flask-restplus
+sqlalchemy
+Werkzeug==0.16.0
+requests
