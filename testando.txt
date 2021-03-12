@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask
 from sqlalchemy import ForeignKey
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
@@ -180,7 +180,7 @@ class immobile_type(db.Model):
 class payment(db.Model):
     __tablename__ = 'imovel'
     id_imovel = db.Column(db.Integer(), primary_key=True, autoincrement=True, unique=True)
-    id_endereco_imov = db.Column(db.Integer(), ForeignKey('endereco_imovel.id_endereco_imov'), unique=True)
+    id_endereco_imov = db.Column(db.Integer(), ForeignKey('endereco_imovel.id_endereco_imovel'), unique=True)
     id_owner = db.Column(db.Integer(), ForeignKey('proprietario.id_owner'), unique=True) 
     id_vendedor = db.Column(db.Integer(), ForeignKey('vendedor.id_vendedor'), unique=True)
     id_tipo_imovel = db.Column(db.Integer(), ForeignKey('tipo_imovel.id_tipo_imovel'), unique=True)
@@ -194,47 +194,9 @@ class payment(db.Model):
         self.id_tipo_imovel = id_tipo_imovel
         self.id_compra = id_compra
 
-@app.route('/test', methods=['GET'])
+@app.route('/test', methods
+=['GET'])
 def test():
     return {
         'test': 'test1'
     }
-
-@app.route('/owners', methods=['GET'])
-def gOwners():
-    allOwners = owner.query.all()
-    output = []
-    for owners in allOwners:
-        currOwner = {}
-        currOwner['id_owner'] = owner.id_owner
-        currOwner['name_owner'] = owner.name_owner
-        currOwner['rg_owner'] = owner.rg_owner
-        currOwner['cpf_owner'] = owner.cpf_owner
-        currOwner['birth_date_owner'] = owner.birth_date_owner
-        currOwner['civil_status_owner'] = owner.civil_status_owner
-        currOwner['email_owner'] = owner.email_owner
-        currOwner['cel_owner'] = owner.cel_owner
-        currOwner['prof_owner'] = owner.prof_owner
-        currOwner['tempo_prop'] = owner.tempo_prop
-        output.append(currOwner)
-    return jsonify(output)
-
-@app.route('/owners', methods=['POST'])
-def pOwners():
-    ownersData = request.get_json()
-    owners = owner(id_owner=ownersData['id_owner'], 
-                   name_owner=ownersData['name_owner'], 
-                   rg_owner=ownersData['rg_owner'], 
-                   cpf_owner=ownersData['cpf_owner'], 
-                   birth_date_owner=ownersData['birth_date_owner'], 
-                   civil_status_owner=ownersData['civil_status_owner'], 
-                   email_owner=ownersData['email_owner'], 
-                   cel_owner=ownersData['cel_owner'], 
-                   prof_owner=ownersData['prof_owner'], 
-                   tempo_prop=ownersData['tempo_prop'])
-    db.session.add(owners)
-    db.session.commit()
-    return jsonify(ownersData)
-    
-    
-
