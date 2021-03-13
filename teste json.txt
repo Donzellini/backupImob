@@ -1,0 +1,14 @@
+{
+ "id_owner": "2",
+ "name_owner": "test",
+ "rg_owner": "123456789",
+ "cpf_owner": "12345678912",
+ "birth_date_owner": "1234567890",
+ "civil_status_owner": "12345678901234567890",
+ "email_owner": "test5",
+ "cel_owner": "test6",
+ "prof_owner": "test7",
+ "tempo_prop": "test8"
+}
+
+passa o json inteiro e trata lá dentro no metodo put
