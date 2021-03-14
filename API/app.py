@@ -828,3 +828,83 @@ class gpImmobileType(Resource):
             name_space.abort(500, e.__doc__, status = "Could not save information", statusCode = "500")
         except Exception as e:
             name_space.abort(400, e.__doc__, status = "Could not save information", statusCode = "400")
+
+immobileList = [
+                {"id_imovel": "2",
+                "id_endereco_imov": "1",
+                "id_owner": "1",
+                "id_vendedor": "20",
+                "id_tipo_imovel": "1",
+                "id_compra": "1"}
+              ]
+
+modelImmobile = app.model('Imóveis',
+                    {'id_imovel': fields.Integer(required = True,
+                                               description = "ID do Banco",
+                                               help = "ID não pode estar vazia."),
+                    'id_endereco_imov': fields.Integer(required = True,
+                                                description = "Nome do Banco",
+                                                help = "Nome não pode estar vazio."),
+                    'id_owner': fields.Integer(required = True,
+                                                description = "Nome do Banco",
+                                                help = "Nome não pode estar vazio."),
+                    'id_vendedor': fields.Integer(required = True,
+                                                description = "Nome do Banco",
+                                                help = "Nome não pode estar vazio."),
+                    'id_tipo_imovel': fields.Integer(required = True,
+                                                description = "Nome do Banco",
+                                                help = "Nome não pode estar vazio."),
+                    'id_compra': fields.Integer(required = True,
+                                                description = "Nome do Banco",
+                                                help = "Nome não pode estar vazio.")}) 
+
+@name_space.route('/immobile')
+class gpImmobile(Resource):
+    
+    @app.doc(responses={ 200: 'OK', 400: 'Invalid Argument', 500: 'Mapping Key Error' }, 
+			 params={ 'id': 'Specify the Id associated with the person' })
+
+    def get(self):
+        try:
+
+            allImmobile = immobile.query.all()
+            output = []
+            for immobileList in allImmobile:
+                currImmobile = {}
+                currImmobile['id_imovel'] = immobileList.id_imovel
+                currImmobile['id_endereco_imov'] = immobileList.id_endereco_imov
+                currImmobile['id_owner'] = immobileList.id_owner
+                currImmobile['id_vendedor'] = immobileList.id_vendedor
+                currImmobile['id_tipo_imovel'] = immobileList.id_tipo_imovel
+                currImmobile['id_compra'] = immobileList.id_compra
+                output.append(currImmobile)
+                # output = request.get_json()
+            return jsonify(output)
+
+        except KeyError as e:
+            name_space.abort(500, e.__doc__, status = "Could not retrieve information", statusCode = "500")
+        except Exception as e:
+            name_space.abort(400, e.__doc__, status = "Could not retrieve information", statusCode = "400")
+
+    @app.doc(responses={ 200: 'OK', 400: 'Invalid Argument', 500: 'Mapping Key Error' }, params={ 'id': 'Specify the Id associated with the person' })
+    @app.expect(modelImmobile)
+
+    def post(self):
+
+        try:
+            immobileData = request.get_json()
+            bank = banks(id_imovel=immobileData['id_imovel'], 
+                         id_endereco_imov=immobileData['id_endereco_imov'],
+                         id_owner=immobileData['id_owner'],
+                         id_vendedor=immobileData['id_vendedor'],
+                         id_tipo_imovel=immobileData['id_tipo_imovel'],
+                         id_compra=immobileData['id_compra'])
+            db.session.add(immobileList)
+            db.session.commit()
+        
+            return jsonify(immobileData)
+
+        except KeyError as e:
+            name_space.abort(500, e.__doc__, status = "Could not save information", statusCode = "500")
+        except Exception as e:
+            name_space.abort(400, e.__doc__, status = "Could not save information", statusCode = "400")
